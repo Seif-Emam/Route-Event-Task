@@ -1,0 +1,57 @@
+<!-- Main Product List (shown when not loading and no error) -->
+@if (isLoading) {
+  <div class="flex justify-center items-center h-screen"> <!-- Centered Loader -->
+    <div class="relative">
+      <div class="w-16 h-16 border-4 border-dashed rounded-full border-t-[#35BF44] animate-spin"></div>
+      <div class="absolute top-0 left-0 w-16 h-16 bg-[#35BF44] rounded-full opacity-75 animate-ping"></div>
+    </div>
+  </div>
+}
+@if(!isLoading && !hasError) {
+  <div class="container mx-auto p-4 mt-24"> <!-- Main Container -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"> <!-- Responsive Grid -->
+      @for (product of ProductList; track $index) {
+        <div [routerLink]="['/productsdetails', product.id]" class="cursor-pointer"> <!-- Ensure you use the correct property here -->
+          <div class="relative bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden transition-all transform hover:scale-105 hover:shadow-2xl duration-300 group hover:rotate-1 hover:-translate-y-2" style="min-height: 400px;"> <!-- Set consistent min-height for cards -->
+
+            <!-- Gradient Border -->
+            <div class="absolute inset-0 bg-gradient-to-br from-[#35BF44] via-transparent to-[#35BF44] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+            
+            <!-- Product Image with Fixed Height -->
+            <div class="relative overflow-hidden transform transition-transform duration-500 group-hover:rotate-y-180" style="height: 200px;"> <!-- Fixed image height -->
+              <img [src]="product.image" alt="Product Image" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 group-hover:rotate-y-180">
+            </div>
+            
+            <div class="p-5 relative z-10 flex flex-col justify-between" style="height: 200px;"> <!-- Flexbox for content alignment and fixed height -->
+              <!-- Product Title with Fixed Height -->
+              <h2 class="text-lg font-semibold text-gray-800 transition-colors duration-300 hover:text-[#35BF44] line-clamp-2" style="min-height: 48px;"> <!-- Limit the title to 2 lines -->
+                {{ product.title }}
+              </h2>
+              
+              <!-- Product Price -->
+              <p class="text-gray-500 font-medium mt-1">${{ product.price }}</p>
+              
+              <!-- Product Rating -->
+              <div class="flex items-center mt-1">
+                <span class="text-yellow-500 flex">
+                  <i class="fa-solid fa-star"> {{ product.rating.rate }}</i>
+                </span>
+                <span class="ml-2 text-sm text-gray-600">({{ product.rating.count }} reviews)</span>
+              </div>
+
+              <!-- Hover Buttons for Cart and Wishlist (Initially Hidden) -->
+              <div class="flex mt-4 space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <button class="flex-1 px-4 py-2 bg-[#35BF44] text-white rounded-lg hover:bg-[#2aa837] transition duration-300 shadow-md hover:shadow-lg hover:ring-2 hover:ring-[#2aa837]">
+                  Add to Cart
+                </button>
+                <button class="flex-1 px-4 py-2 border border-[#35BF44] text-[#35BF44] rounded-lg hover:bg-[#35BF44] hover:text-white transition duration-300 shadow-md hover:shadow-lg flex items-center justify-center transform hover:rotate-12">
+                  <i class="fas fa-heart mr-2"></i> Wishlist
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+}
