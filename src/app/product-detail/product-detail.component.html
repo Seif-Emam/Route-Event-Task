@@ -1,45 +1,33 @@
-<!-- Loading Spinner -->
-@if (isLoading) {
-  <div class="h-screen row justify-center items-center">
-
-<div class="loader" >
-
-</div>
-</div>
-
-} @else {
-
-  <!-- Product Details -->
-  <div class="container mx-auto p-4 mt-24">
-    <div class="flex flex-col md:flex-row">
+<div class="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300 py-12">
+  <div class="container mx-auto px-4">
+    <div class="bg-gray-100 dark:bg-gray-800 rounded-2xl shadow-lg p-8 flex flex-col md:flex-row gap-8">
       <!-- Product Image -->
-      <div class="md:w-1/2 mb-4 md:mb-0">
-        <img [src]="product.image" alt="Product Image" class="w-full h-96 object-cover rounded-lg shadow-lg transition-transform duration-300 hover:scale-105">
+      <div class="flex-shrink-0 flex items-center justify-center">
+        <img [src]="product?.image" [alt]="product?.title" class="w-72 h-72 object-contain rounded-xl bg-white dark:bg-gray-900 shadow-md">
       </div>
-    
       <!-- Product Details -->
-      <div class="md:w-1/2 md:pl-4">
-        <h1 class="text-4xl font-extrabold text-gray-800 hover:text-[#35BF44] transition duration-300">{{ product.title }}</h1>
-        <p class="text-gray-700 mt-2 text-lg">{{ product.description }}</p>
-        <p class="text-xl font-semibold text-gray-800 mt-4">${{ product.price }}</p>
-    
-        <div class="flex items-center mt-2">
-          <span class="text-yellow-500 flex">
-            <i class="fa-solid fa-star"></i>
-            <span class="ml-1 text-sm text-gray-600">({{ product.rating.rate }} - {{ product.rating.count }} reviews)</span>
-          </span>
+      <div class="flex-1 flex flex-col justify-between">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">{{ product?.title }}</h1>
+          <p class="text-lg text-gray-700 dark:text-gray-300 mb-4">{{ product?.description }}</p>
+          <div class="flex items-center mb-4">
+            <span class="text-2xl font-semibold text-[#2563eb] mr-4">${{ product?.price }}</span>
+            <span class="flex items-center text-yellow-500">
+              <i class="fa-solid fa-star mr-1"></i> {{ product?.rating?.rate }}
+              <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">({{ product?.rating?.count }} reviews)</span>
+            </span>
+          </div>
+          <div class="mb-4">
+            <span class="inline-block px-3 py-1 bg-[#2563eb]/10 dark:bg-[#2563eb]/20 text-[#2563eb] rounded-full text-sm font-medium">{{ product?.category }}</span>
+          </div>
         </div>
-    
-        <!-- Buttons -->
-        <div class="mt-6 flex space-x-2">
-          <button class="flex-1 px-6 py-3 bg-[#35BF44] text-white rounded-lg shadow-md hover:bg-[#2aa837] transition duration-300">
-            Add to Cart
-          </button>
-          <button class="flex-1 px-6 py-3 border border-[#35BF44] text-[#35BF44] rounded-lg shadow-md hover:bg-[#35BF44] hover:text-white transition duration-300 flex items-center justify-center">
+        <div class="mt-6 flex gap-4">
+          <button class="flex-1 px-6 py-3 bg-[#2563eb] text-white rounded-lg hover:bg-[#1d4ed8] transition duration-300 shadow-md hover:shadow-lg hover:ring-2 hover:ring-[#1d4ed8]">Add to Cart</button>
+          <button class="flex-1 px-6 py-3 border border-[#2563eb] text-[#2563eb] rounded-lg hover:bg-[#2563eb] hover:text-white transition duration-300 shadow-md hover:shadow-lg flex items-center justify-center">
             <i class="fas fa-heart mr-2"></i> Wishlist
           </button>
         </div>
       </div>
     </div>
   </div>
-}
+</div>

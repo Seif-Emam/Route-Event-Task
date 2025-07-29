@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductservService } from '../shared/servives/productserv.service';
+import { ProductService } from '../shared/servives/productserv.service';
 import { ActivatedRoute } from '@angular/router';
 import { Product } from '../shared/interfaces/product';
 
@@ -15,7 +15,7 @@ export class ProductDetailComponent implements OnInit {
   hasError=false;
   product!:Product;
 
-constructor(private _ProductservService:ProductservService, private _ActivatedRoute:ActivatedRoute){
+constructor(private _ProductservService:ProductService, private _ActivatedRoute:ActivatedRoute){
 
 }
   ngOnInit(): void {
@@ -33,10 +33,10 @@ constructor(private _ProductservService:ProductservService, private _ActivatedRo
       }
     })              
 
-    this._ProductservService.getProductsById(id).subscribe({
+    this._ProductservService.getProductById(id).subscribe({
        
         
-      next : (res) =>{
+      next : (res:any) =>{
 
         this.product=res
 

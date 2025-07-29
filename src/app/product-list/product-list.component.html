@@ -1,51 +1,79 @@
-<!-- Main Product List (shown when not loading and no error) -->
+<!-- Loader -->
 @if (isLoading) {
-  <div class="flex justify-center items-center h-screen"> <!-- Centered Loader -->
+  <div class="flex justify-center items-center h-screen bg-white dark:bg-gray-900">
     <div class="relative">
-      <div class="w-16 h-16 border-4 border-dashed rounded-full border-t-[#35BF44] animate-spin"></div>
-      <div class="absolute top-0 left-0 w-16 h-16 bg-[#35BF44] rounded-full opacity-75 animate-ping"></div>
+      <div class="w-16 h-16 border-4 border-dashed rounded-full border-t-[#2563eb] dark:border-[#2563eb] animate-spin"></div>
+      <div class="absolute top-0 left-0 w-16 h-16 bg-[#2563eb] dark:bg-[#2563eb] rounded-full opacity-75 animate-ping"></div>
     </div>
   </div>
 }
-@if(!isLoading && !hasError) {
-  <div class="container mx-auto p-4 mt-24"> <!-- Main Container -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"> <!-- Responsive Grid -->
-      @for (product of ProductList; track $index) {
-        <div [routerLink]="['/productsdetails', product.id]" class="cursor-pointer"> <!-- Ensure you use the correct property here -->
-          <div class="relative bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden transition-all transform hover:scale-105 hover:shadow-2xl duration-300 group hover:rotate-1 hover:-translate-y-2" style="min-height: 400px;"> <!-- Set consistent min-height for cards -->
 
-            <!-- Gradient Border -->
-            <div class="absolute inset-0 bg-gradient-to-br from-[#35BF44] via-transparent to-[#35BF44] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-            
-            <!-- Product Image with Fixed Height -->
-            <div class="relative overflow-hidden transform transition-transform duration-500 group-hover:rotate-y-180" style="height: 200px;"> <!-- Fixed image height -->
-              <img [src]="product.image" alt="Product Image" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 group-hover:rotate-y-180">
+@if (!isLoading && !hasError) {
+  <div class="  p-8 mt-12 bg-white dark:bg-gray-900">
+    <!-- Search Bar and Sort Row -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8 w-full">
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        (input)="onSearchChange()"
+        placeholder="Search products..."
+        class="w-full max-w-lg px-6 py-3 rounded-full border-2 border-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#2563eb] shadow-lg text-lg transition-all duration-300 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 hover:shadow-2xl"
+        style="box-shadow: 0 4px 24px rgba(37,99,235,0.08);"
+      />
+      <select
+        [(ngModel)]="selectedSort"
+        (change)="onSortChange()"
+        class="w-full md:w-64 px-6 py-3 rounded-full border-2 border-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#2563eb] shadow-lg text-lg transition-all duration-300 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-100 hover:shadow-2xl"
+      >
+        <option value="" disabled selected>Sort by...</option>
+        <option value="priceLowHigh">Price: Low to High</option>
+        <option value="priceHighLow">Price: High to Low</option>
+        <option value="ratingHighLow">Rating: High to Low</option>
+        <option value="nameAZ">Name: A-Z</option>
+        <option value="nameZA">Name: Z-A</option>
+      </select>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      @for (product of filteredProducts; track $index) {
+        <div [routerLink]="['/productsdetails', product.id]" class="cursor-pointer group">
+          <div
+            class="relative bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border border-gray-200 dark:border-gray-800 rounded-3xl shadow-2xl overflow-hidden transition-all duration-300 group-hover:scale-105 group-hover:shadow-[0_8px_32px_0_rgba(37,99,235,0.15)] group-hover:border-[#2563eb] group-hover:ring-2 group-hover:ring-[#2563eb]/40"
+            style="min-height: 440px;"
+          >
+            <!-- Accent Gradient Border (on hover) -->
+            <div class="absolute inset-0 bg-gradient-to-br from-[#2563eb]/10 via-transparent to-[#2563eb]/10 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+            <!-- Product Image -->
+            <div class="relative flex items-center justify-center overflow-hidden" style="height: 200px;">
+              <img [src]="product.image" alt="Product Image" class="w-40 h-40 object-contain drop-shadow-lg transition-transform duration-500 group-hover:scale-110" />
             </div>
-            
-            <div class="p-5 relative z-10 flex flex-col justify-between" style="height: 200px;"> <!-- Flexbox for content alignment and fixed height -->
-              <!-- Product Title with Fixed Height -->
-              <h2 class="text-lg font-semibold text-gray-800 transition-colors duration-300 hover:text-[#35BF44] line-clamp-2" style="min-height: 48px;"> <!-- Limit the title to 2 lines -->
+            <div class="p-6 relative z-10 flex flex-col justify-between gap-2" style="height: 220px;">
+              <h2
+                class="text-lg font-extrabold text-gray-800 dark:text-gray-100 transition-colors duration-300 group-hover:text-[#2563eb] line-clamp-2 mb-1 tracking-tight"
+                style="min-height: 48px;"
+              >
                 {{ product.title }}
               </h2>
-              
-              <!-- Product Price -->
-              <p class="text-gray-500 font-medium mt-1">${{ product.price }}</p>
-              
-              <!-- Product Rating -->
-              <div class="flex items-center mt-1">
-                <span class="text-yellow-500 flex">
-                  <i class="fa-solid fa-star"> {{ product.rating.rate }}</i>
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xl font-bold text-[#2563eb] dark:text-[#2563eb]">${{ product.price }}</span>
+                <span class="flex items-center text-yellow-500 text-sm font-semibold">
+                  <i class="fa-solid fa-star mr-1"></i> {{ product.rating.rate }}
+                  <span class="ml-1 text-xs text-gray-600 dark:text-gray-400">({{ product.rating.count }})</span>
                 </span>
-                <span class="ml-2 text-sm text-gray-600">({{ product.rating.count }} reviews)</span>
               </div>
-
-              <!-- Hover Buttons for Cart and Wishlist (Initially Hidden) -->
-              <div class="flex mt-4 space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <button class="flex-1 px-4 py-2 bg-[#35BF44] text-white rounded-lg hover:bg-[#2aa837] transition duration-300 shadow-md hover:shadow-lg hover:ring-2 hover:ring-[#2aa837]">
-                  Add to Cart
+              <span class="inline-block px-3 py-1 bg-[#2563eb]/10 dark:bg-[#2563eb]/20 text-[#2563eb] rounded-full text-xs font-medium mb-2">{{ product.category }}</span>
+              <p class="text-gray-500 dark:text-gray-300 text-xs line-clamp-2 mb-2">{{ product.description }}</p>
+              <div class="flex mt-auto space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <button
+                  class="flex-1 px-4 py-2 bg-[#2563eb] text-white rounded-lg hover:bg-[#1d4ed8] transition duration-300 shadow-md hover:shadow-lg hover:ring-2 hover:ring-[#1d4ed8] flex items-center justify-center gap-2"
+                >
+                  <i class="fa-solid fa-cart-plus"></i> Add to Cart
                 </button>
-                <button class="flex-1 px-4 py-2 border border-[#35BF44] text-[#35BF44] rounded-lg hover:bg-[#35BF44] hover:text-white transition duration-300 shadow-md hover:shadow-lg flex items-center justify-center transform hover:rotate-12">
-                  <i class="fas fa-heart mr-2"></i> Wishlist
+                <button
+                  class="flex-1 px-4 py-2 border border-[#2563eb] text-[#2563eb] rounded-lg hover:bg-[#2563eb] hover:text-white transition duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                >
+                  <i class="fas fa-heart"></i> Wishlist
                 </button>
               </div>
             </div>

@@ -1,39 +1,57 @@
-<nav class="bg-white shadow-lg transition duration-300 ease-in-out fixed top-0 left-0 right-0 z-50">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center h-16">
-        <div class="flex-shrink-0">
-          <h1 class="text-3xl font-extrabold text-[#35BF44] transition-transform duration-300 transform hover:scale-110 cursor-pointer">
-            MyStore
-          </h1> <!-- Replace with your store name -->
-        </div>
-        <div class="hidden md:flex space-x-8">
-          <a routerLink="/home" class="relative group text-gray-700 hover:text-[#35BF44] px-3 py-2 rounded-md text-lg font-medium transition duration-300 cursor-pointer">
-            <i class="fas fa-home"></i> Home
-            <span class="absolute left-0 -bottom-1 h-0.5 w-full bg-[#35BF44] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-          </a>
-          <a routerLink="/product" class="relative group text-gray-700 hover:text-[#35BF44] px-3 py-2 rounded-md text-lg font-medium transition duration-300 cursor-pointer">
-            <i class="fas fa-box"></i> Products
-            <span class="absolute left-0 -bottom-1 h-0.5 w-full bg-[#35BF44] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-          </a>
-        </div>
-        <div class="md:hidden">
-          <button id="mobile-menu-button" class="text-gray-700 focus:outline-none transition-transform duration-300 hover:scale-110">
-            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-            </svg>
-          </button>
-        </div>
+<nav class="backdrop-blur-lg bg-white/80 dark:bg-gray-900/90 shadow-2xl border-b border-[#2563eb]/10 transition duration-300 ease-in-out fixed top-0 left-0 right-0 z-50">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <div class="flex-shrink-0">
+        <h1 class="text-3xl font-extrabold text-[#2563eb] transition-transform duration-300 transform hover:scale-110 cursor-pointer drop-shadow-lg">
+          MyStore
+        </h1>
+      </div>
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex space-x-8 items-center">
+        <a routerLink="/home" routerLinkActive="text-[#2563eb]" class="relative group text-gray-700 dark:text-gray-200 hover:text-[#2563eb] px-3 py-2 rounded-md text-lg font-medium transition duration-300 cursor-pointer">
+          <i class="fas fa-home"></i> Home
+          <span class="absolute left-0 -bottom-1 h-0.5 w-full bg-[#2563eb] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+        </a>
+        <a routerLink="/product" routerLinkActive="text-[#2563eb]" class="relative group text-gray-700 dark:text-gray-200 hover:text-[#2563eb] px-3 py-2 rounded-md text-lg font-medium transition duration-300 cursor-pointer">
+          <i class="fas fa-box"></i> Products
+          <span class="absolute left-0 -bottom-1 h-0.5 w-full bg-[#2563eb] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+        </a>
+        <!-- Theme Toggle Button -->
+        <button (click)="toggleTheme()" aria-label="Toggle dark mode" class="ml-4 p-2 rounded-full border-2 border-[#2563eb] bg-white dark:bg-gray-800 text-[#2563eb] dark:text-yellow-300 shadow hover:bg-[#2563eb] hover:text-white dark:hover:bg-yellow-400 dark:hover:text-gray-900 transition duration-300">
+          <ng-container *ngIf="theme === 'light'; else darkIcon">
+            <i class="fas fa-moon"></i>
+          </ng-container>
+          <ng-template #darkIcon>
+            <i class="fas fa-sun"></i>
+          </ng-template>
+        </button>
+      </div>
+      <!-- Hamburger Icon -->
+      <div class="md:hidden flex items-center">
+        <button (click)="toggleMobileMenu()" aria-label="Toggle menu" class="relative w-10 h-10 flex flex-col justify-center items-center group focus:outline-none">
+          <span class="block w-8 h-1 bg-[#2563eb] rounded-full transition-all duration-300 mb-1 group-hover:w-10" [ngClass]="{'rotate-45 translate-y-2': isMobileMenuOpen}"></span>
+          <span class="block w-8 h-1 bg-[#2563eb] rounded-full transition-all duration-300 mb-1" [ngClass]="{'opacity-0': isMobileMenuOpen}"></span>
+          <span class="block w-8 h-1 bg-[#2563eb] rounded-full transition-all duration-300" [ngClass]="{'-rotate-45 -translate-y-2': isMobileMenuOpen}"></span>
+        </button>
       </div>
     </div>
-  
-    <!-- Mobile Menu -->
-    <div id="mobile-menu" class="md:hidden hidden">
-      <a routerLink="/home" class="block px-4 py-2 text-gray-700 hover:text-[#35BF44] transition duration-300">
-        <i class="fas fa-home"></i> Home
-      </a>
-      <a routerLink="/products" class="block px-4 py-2 text-gray-700 hover:text-[#35BF44] transition duration-300">
-        <i class="fas fa-box"></i> Products
-      </a>
-    </div>
-  </nav>
+  </div>
+  <!-- Mobile Menu -->
+  <div *ngIf="isMobileMenuOpen" class="md:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg shadow-2xl border-b border-[#2563eb]/10 animate-fade-in-down">
+    <a routerLink="/home" (click)="toggleMobileMenu()" class="block px-6 py-3 text-gray-700 dark:text-gray-200 hover:text-[#2563eb] text-lg font-semibold transition duration-300 border-b border-gray-100 dark:border-gray-800">
+      <i class="fas fa-home"></i> Home
+    </a>
+    <a routerLink="/product" (click)="toggleMobileMenu()" class="block px-6 py-3 text-gray-700 dark:text-gray-200 hover:text-[#2563eb] text-lg font-semibold transition duration-300">
+      <i class="fas fa-box"></i> Products
+    </a>
+    <button (click)="toggleTheme(); toggleMobileMenu()" aria-label="Toggle dark mode" class="w-full text-left px-6 py-3 text-[#2563eb] dark:text-yellow-300 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-800 flex items-center gap-2">
+      <ng-container *ngIf="theme === 'light'; else darkIconMobile">
+        <i class="fas fa-moon"></i> Dark Mode
+      </ng-container>
+      <ng-template #darkIconMobile>
+        <i class="fas fa-sun"></i> Light Mode
+      </ng-template>
+    </button>
+  </div>
+</nav>
   
