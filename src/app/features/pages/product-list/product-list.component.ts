@@ -1,8 +1,11 @@
 import { RouterLink } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ProductService } from '../shared/servives/productserv.service';
-import { Product } from '../shared/interfaces/product';
+import { ProductService } from '../../../core/services/products-service/productserv.service';
+import { Product } from '../../../core/interfaces/product';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { LoadingService } from '../../../core/services/loading-service/loading.service';
 
 @Component({
   selector: 'app-product-list',
@@ -11,35 +14,45 @@ import { Product } from '../shared/interfaces/product';
   styleUrls: ['./product-list.component.css'],
   imports: [RouterLink, FormsModule]
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   filteredProducts: Product[] = [];
-  isLoading = true;
   hasError = false;
   searchQuery: string = '';
   selectedSort: string = '';
+  isLoading = false;
+  private destroy$ = new Subject<void>();
 
-  constructor(private productService: ProductService) { }
+  constructor(private productService: ProductService, private loadingService: LoadingService) { }
 
   ngOnInit(): void {
-    setTimeout(() => {
-      this.getAllProducts();
-    }, 1000);
+    this.loadingService.loading$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(loading => this.isLoading = loading);
+    // setTimeout(() => {
+    //   this.getAllProducts();
+    // }, 500);
+    this.getAllProducts();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   getAllProducts() {
-    this.productService.getAllProducts().subscribe({
-      next: res => {
-        this.products = res;
-        this.filteredProducts = res;
-        this.isLoading = false;
-      },
-      error: err => {
-        console.log('Error fetching products', err);
-        this.hasError = true;
-        this.isLoading = false;
-      }
-    });
+    this.productService.getAllProducts()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: any) => {
+          this.products = res;
+          this.filteredProducts = res;
+        },
+        error: (err: any) => {
+          console.log('Error fetching products', err);
+          this.hasError = true;
+        }
+      });
   }
 
   onSearchChange() {
