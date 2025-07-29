@@ -12,20 +12,24 @@ MyStore is a modern, responsive e-commerce web application built with Angular. I
 > 💡 **Live Demo:** [https://route-event-task-vert.vercel.app](#)
 
 ## 🧱 Tech Stack Used
-- **Angular 17+**
-- **Tailwind CSS** (utility-first styling)
+- **Angular 17+** (Standalone Components)
+- **Tailwind CSS** (utility-first styling, dark mode)
 - **Font Awesome** (icons)
-- **RxJS** (reactive programming)
+- **RxJS** (reactive programming, subscription management)
 - **TypeScript**
 - **Fake Store API** (product data)
+- **Angular Router** (lazy loading)
+- **HTTP Interceptors** (global loading state)
 
 ## 🚀 Features
-- Product listing with grid view and creative card design
-- Product details page with image, price, and rating
-- Responsive navigation bar and footer
-- Search bar and dropdown filters (price, rating, name)
-- Loading states and error handling
-- Newsletter subscription and social links in footer
+- **Product Management**: Product listing with grid view and creative card design
+- **Product Details**: Detailed product pages with image, price, and rating
+- **Search & Filtering**: Search bar and dropdown filters (price, rating, name)
+- **Responsive Design**: Mobile-first responsive navigation bar and footer
+- **Dark/Light Mode**: Toggle between dark and light themes with persistence
+- **Loading States**: Global HTTP interceptor-based loading spinner
+- **Error Handling**: Comprehensive error handling and user feedback
+- **Performance**: Lazy loading for all routes and optimized bundle size
 
 ## 🛠️ Getting Started
 1. **Clone the repository:**
@@ -48,18 +52,47 @@ MyStore is a modern, responsive e-commerce web application built with Angular. I
 - `GET /products` — Fetch all products
 - `GET /products/:id` — Fetch single product details
 
-## 📁 Project Structure (Simplified)
+## 📁 Project Structure
 ```
 src/
-  app/
-    navbar/
-    footer/
-    product-list/
-    product-detail/
-    shared/
-      services/
-      interfaces/
+├── app/
+│   ├── core/                    # Core application features
+│   │   ├── interceptors/        # HTTP interceptors
+│   │   ├── layout/              # Navbar & Footer
+│   │   └── services/            # Core services
+│   │
+│   ├── features/                # Feature modules
+│   │   └── pages/               # Page components
+│   │       ├── home/            # Home page
+│   │       ├── product-list/    # Product listing
+│   │       └── product-detail/  # Product details
+│   │
+│   ├── shared/                  # Shared components
+│   │   ├── interfaces/          # TypeScript interfaces
+│   │   └── notfound/            # 404 page
+│   │
+│   ├── app.component.*          # Root component
+│   ├── app.config.ts            # App configuration
+│   └── app.routes.ts            # Route definitions
+│
+├── assets/                      # Static assets
+├── main.ts                      # Application entry
+└── styles.css                   # Global styles
 ```
+
+## 🏗️ Architecture Highlights
+- **Standalone Components**: Modern Angular architecture with standalone components
+- **Lazy Loading**: All routes are lazy-loaded for optimal performance
+- **Service Layer**: Clean separation with dedicated services for data management
+- **Interceptor Pattern**: Global HTTP interceptor for loading states
+- **Reactive Programming**: RxJS for state management and data flow
+- **Type Safety**: Full TypeScript implementation with interfaces
+
+## 🎨 Design System
+- **Color Palette**: Blue theme (`#2563eb` primary, `#1d4ed8` hover)
+- **Dark Mode**: Class-based dark mode with localStorage persistence
+- **Responsive**: Mobile-first design with Tailwind CSS breakpoints
+- **Animations**: Smooth transitions and hover effects throughout
 
 ## 🤝 Contributing
 1. Fork the repository
