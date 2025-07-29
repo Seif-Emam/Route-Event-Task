@@ -9,7 +9,7 @@ MyStore is a modern, responsive e-commerce web application built with Angular. I
 |---|---|---|
 | ![Home](screenshots/home.png) | ![Product List](screenshots/product-list.png) | ![Product Detail](screenshots/product-detail.png) |
 
-> 💡 **Live Demo:** [Coming Soon](#)
+> 💡 **Live Demo:** [https://route-event-task-vert.vercel.app](#)
 
 ## 🧱 Tech Stack Used
 - **Angular 17+**
