@@ -63,6 +63,16 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.applyFilters();
   }
 
+  // Check if there are no search results
+  get hasNoResults(): boolean {
+    return this.searchQuery.trim() !== '' && this.filteredProducts.length === 0;
+  }
+
+  // Get the search term for display
+  get searchTerm(): string {
+    return this.searchQuery.trim();
+  }
+
   applyFilters() {
     const query = this.searchQuery.trim().toLowerCase();
     let filtered = this.products.filter(product =>
